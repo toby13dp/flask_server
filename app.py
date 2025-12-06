@@ -8,6 +8,17 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'static'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+
+@app.route('/')
+def builder():
+    return send_from_directory('static', 'builder.html')
+
+
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    return send_from_directory('static', filename)
+
+
 @app.route('/convert', methods=['POST'])
 def convert():
     if 'pdf' not in request.files:
@@ -34,6 +45,7 @@ def convert():
 
     with open(html_output_path, encoding="utf-8") as f:
         return f.read()
+
 
 if __name__ == '__main__':
     app.run(debug=True)
